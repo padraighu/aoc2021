@@ -1,26 +1,33 @@
-import pytest
 from typing import List, Tuple
+
+import pytest
 from util import read_input
 
-TEST_INPUT, REAL_INPUT = read_input('04')
+TEST_INPUT, REAL_INPUT = read_input("04")
+
 
 def parse_input(input: str) -> Tuple[List[int], List[List[int]]]:
     lines = input.splitlines()
-    draw = [int(n) for n in lines[0].split(',')]
-    lines = [[int(n.strip()) for n in l.split(' ') if len(n.strip()) > 0] for l in lines[2:] if len(l) > 0]
+    draw = [int(n) for n in lines[0].split(",")]
+    lines = [
+        [int(n.strip()) for n in l.split(" ") if len(n.strip()) > 0]
+        for l in lines[2:]
+        if len(l) > 0
+    ]
     boards = []
     for i in range(int(len(lines) / 5)):
         board = []
         for j in range(5):
-            board.append(lines[i*5+j])
+            board.append(lines[i * 5 + j])
         boards.append(board)
     return draw, boards
+
 
 def part_one(draw: List[int], boards: List[List[int]]) -> int:
     res = 0
     winner = False
-    for i in range(len(draw)-5):
-        curr = draw[:i+5]
+    for i in range(len(draw) - 5):
+        curr = draw[: i + 5]
         for board in boards:
             winner = check_winner(curr, board)
             if winner:
@@ -29,6 +36,7 @@ def part_one(draw: List[int], boards: List[List[int]]) -> int:
                 res = the_sum * the_num
                 return res
     return -1
+
 
 def check_winner(draw: List[int], board: List[List[int]]) -> bool:
     # check rows, then columns
@@ -45,6 +53,7 @@ def check_winner(draw: List[int], board: List[List[int]]) -> bool:
             return winner
     return False
 
+
 def sum_of_unmarked(marked: List[int], board: List[List[int]]) -> int:
     res = 0
     for row in board:
@@ -53,12 +62,13 @@ def sum_of_unmarked(marked: List[int], board: List[List[int]]) -> int:
                 res += val
     return res
 
+
 def part_two(draw: List[int], boards: List[List[int]]) -> int:
     res = 0
     winner = False
     already_won = []
-    for i in range(len(draw)-5):
-        curr = draw[:i+5]
+    for i in range(len(draw) - 5):
+        curr = draw[: i + 5]
         for board in boards:
             if board not in already_won:
                 winner = check_winner(curr, board)
@@ -72,12 +82,14 @@ def part_two(draw: List[int], boards: List[List[int]]) -> int:
     res = the_sum * the_num
     return res
 
-@pytest.mark.parametrize('input, res', [(TEST_INPUT, 4512), (REAL_INPUT, 12796)])
+
+@pytest.mark.parametrize("input, res", [(TEST_INPUT, 4512), (REAL_INPUT, 12796)])
 def test_part_one(input: str, res: int) -> None:
     draw, boards = parse_input(input)
     assert part_one(draw, boards) == res
 
-@pytest.mark.parametrize('input, res', [(TEST_INPUT, 1924), (REAL_INPUT, 18063)])
+
+@pytest.mark.parametrize("input, res", [(TEST_INPUT, 1924), (REAL_INPUT, 18063)])
 def test_part_two(input: str, res: int) -> None:
     draw, boards = parse_input(input)
     assert part_two(draw, boards) == res

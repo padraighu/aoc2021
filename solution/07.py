@@ -1,4 +1,3 @@
-from collections import defaultdict
 from typing import List
 
 import pytest
@@ -16,7 +15,7 @@ def part_one(crabs: List[int]) -> int:
     for center in range(min(crabs), max(crabs)):
         fuel = 0
         for crab in crabs:
-            fuel += abs(crab-center)
+            fuel += abs(crab - center)
         if fuel < res:
             res = fuel
     return res
@@ -27,11 +26,12 @@ def part_two(crabs: List[int]) -> int:
     for center in range(min(crabs), max(crabs)):
         fuel = 0
         for crab in crabs:
-            n = abs(crab-center) 
-            fuel += int(n * (n+1) / 2)
+            n = abs(crab - center)
+            fuel += int(n * (n + 1) / 2)
         if fuel < res:
             res = fuel
     return res
+
 
 @pytest.mark.parametrize("input, res", [(TEST_INPUT, 37), (REAL_INPUT, 343441)])
 def test_part_one(input: str, res: int) -> None:

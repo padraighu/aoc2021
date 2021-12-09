@@ -1,11 +1,14 @@
-import pytest
 from typing import List
+
+import pytest
 from util import read_input
 
-TEST_INPUT, REAL_INPUT = read_input('01')
+TEST_INPUT, REAL_INPUT = read_input("01")
+
 
 def parse_input(input: str) -> List[int]:
     return [int(i) for i in input.splitlines()]
+
 
 def part_one(input: List[int]) -> int:
     res = 0
@@ -13,6 +16,7 @@ def part_one(input: List[int]) -> int:
         if curr > prev:
             res += 1
     return res
+
 
 def part_two(input: List[int]) -> int:
     res = 0
@@ -25,10 +29,12 @@ def part_two(input: List[int]) -> int:
         prev = curr
     return res
 
-@pytest.mark.parametrize('input, res', [(TEST_INPUT, 7), (REAL_INPUT, 1752)])
+
+@pytest.mark.parametrize("input, res", [(TEST_INPUT, 7), (REAL_INPUT, 1752)])
 def test_part_one(input: str, res: int) -> None:
     assert part_one(parse_input(input)) == res
 
-@pytest.mark.parametrize('input, res', [(TEST_INPUT, 5), (REAL_INPUT, 1781)])
+
+@pytest.mark.parametrize("input, res", [(TEST_INPUT, 5), (REAL_INPUT, 1781)])
 def test_part_two(input: str, res: int) -> None:
     assert part_two(parse_input(input)) == res
