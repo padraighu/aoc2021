@@ -1,6 +1,5 @@
-from collections import deque
-from typing import Deque, List, Set, Tuple
 import itertools
+from typing import List, Set, Tuple
 
 import pytest
 from util import read_input
@@ -30,9 +29,14 @@ def part_one(octs: List[List[int]]) -> int:
                     res += 1
                     octs[i][j] = 0
                     flashed.add((i, j))
-                    nbrs = [(i+x,j+y) for (x, y) in deltas if 0 <= i+x < nrow and 0 <= j+y < ncol and (x, y) != (0,0)]
+                    nbrs = [
+                        (i + x, j + y)
+                        for (x, y) in deltas
+                        if 0 <= i + x < nrow and 0 <= j + y < ncol and (x, y) != (0, 0)
+                    ]
                     stack += nbrs
     return res
+
 
 def part_two(octs: List[List[int]]) -> int:
     res = 0
@@ -52,7 +56,11 @@ def part_two(octs: List[List[int]]) -> int:
                 if octs[i][j] > 9:
                     octs[i][j] = 0
                     flashed.add((i, j))
-                    nbrs = [(i+x,j+y) for (x, y) in deltas if 0 <= i+x < nrow and 0 <= j+y < ncol and (x, y) != (0,0)]
+                    nbrs = [
+                        (i + x, j + y)
+                        for (x, y) in deltas
+                        if 0 <= i + x < nrow and 0 <= j + y < ncol and (x, y) != (0, 0)
+                    ]
                     stack += nbrs
         sync = True
         for i in range(nrow):
@@ -65,9 +73,11 @@ def part_two(octs: List[List[int]]) -> int:
             break
     return res
 
+
 @pytest.mark.parametrize("input, res", [(TEST_INPUT, 1656), (REAL_INPUT, 1642)])
 def test_part_one(input: str, res: int) -> None:
     assert part_one(parse_input(input)) == res
+
 
 @pytest.mark.parametrize("input, res", [(TEST_INPUT, 195), (REAL_INPUT, 320)])
 def test_part_two(input: str, res: int) -> None:
