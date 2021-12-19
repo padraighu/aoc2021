@@ -1,6 +1,6 @@
 import itertools
-from typing import List, Set, Tuple, Dict
 from collections import defaultdict
+from typing import Dict, List, Set, Tuple
 
 import pytest
 from util import read_input
@@ -12,17 +12,18 @@ def parse_input(input: str) -> Dict[str, List[str]]:
     lines = input.splitlines()
     res = defaultdict(list)
     for l in lines:
-        a, b = l.split('-')
+        a, b = l.split("-")
         res[a].append(b)
         res[b].append(a)
     return res
 
 
 def part_one(graph: Dict[str, List[str]]) -> int:
-    return part_one_helper(graph, 'start', [])
+    return part_one_helper(graph, "start", [])
+
 
 def part_one_helper(graph: Dict[str, List[str]], curr: str, visited: List[str]) -> int:
-    if curr == 'end':
+    if curr == "end":
         return 1
     visited.append(curr)
     nbrs = graph[curr]
@@ -32,11 +33,13 @@ def part_one_helper(graph: Dict[str, List[str]], curr: str, visited: List[str]) 
             res += part_one_helper(graph, nbr, list(visited))
     return res
 
+
 def part_two(graph: Dict[str, List[str]]) -> int:
-    return part_two_helper(graph, 'start', [])
+    return part_two_helper(graph, "start", [])
+
 
 def part_two_helper(graph: Dict[str, List[str]], curr: str, visited: List[str]) -> int:
-    if curr == 'end':
+    if curr == "end":
         return 1
     visited.append(curr)
     nbrs = graph[curr]
@@ -47,8 +50,8 @@ def part_two_helper(graph: Dict[str, List[str]], curr: str, visited: List[str]) 
         else:
             if nbr not in visited:
                 can_visit = True
-            elif nbr != 'start':
-                cnt = defaultdict(int)
+            elif nbr != "start":
+                cnt = defaultdict(int)  # type: Dict[str, int]
                 for v in visited:
                     if v.islower():
                         cnt[v] += 1
@@ -63,9 +66,11 @@ def part_two_helper(graph: Dict[str, List[str]], curr: str, visited: List[str]) 
             res += part_two_helper(graph, nbr, list(visited))
     return res
 
+
 @pytest.mark.parametrize("input, res", [(TEST_INPUT, 226), (REAL_INPUT, 3369)])
 def test_part_one(input: str, res: int) -> None:
     assert part_one(parse_input(input)) == res
+
 
 @pytest.mark.parametrize("input, res", [(TEST_INPUT, 3509), (REAL_INPUT, 85883)])
 def test_part_two(input: str, res: int) -> None:
