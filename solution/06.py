@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import List
+from typing import Dict, List
 
 import pytest
 from util import read_input
@@ -17,7 +17,7 @@ def part_one(fish: List[int]) -> int:
 
 def helper(fish: List[int], DAYS: int) -> int:
     res = 0
-    cnt = defaultdict(int)
+    cnt = defaultdict(int)  # type: Dict[int, int]
     for f in fish:
         cnt[f] += 1
     for _day in range(DAYS):

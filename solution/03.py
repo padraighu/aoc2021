@@ -29,10 +29,10 @@ def part_two(input: List[List[int]]) -> int:
     return res
 
 
-def part_two_helper(input: List[List[int]]) -> Tuple[int]:
+def part_two_helper(input: List[List[int]]) -> Tuple[int, int]:
     ncol = len(input[0])
     cols = [[row[col] for row in input] for col in range(ncol)]
-    keep_idx = range(len(input))  # which numbers to keep
+    keep_idx = list(range(len(input)))  # which numbers to keep
     for idx, col in enumerate(cols):
         col = [col[i] for i in keep_idx]
         mc = most_common(col)
@@ -41,7 +41,7 @@ def part_two_helper(input: List[List[int]]) -> Tuple[int]:
             break
     assert len(keep_idx) == 1
     oxy = int("".join([str(n) for n in input[keep_idx[0]]]), 2)
-    keep_idx = range(len(input))  # which numbers to keep
+    keep_idx = list(range(len(input)))  # which numbers to keep
     for idx, col in enumerate(cols):
         col = [col[i] for i in keep_idx]
         lc = least_common(col)

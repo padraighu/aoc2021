@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 import pytest
 from util import read_input
@@ -7,17 +7,20 @@ from util import read_input
 TEST_INPUT, REAL_INPUT = read_input("05")
 
 
-def parse_input(input: str) -> List[Tuple[Tuple[int]]]:
+def parse_input(input: str) -> List[Tuple[Tuple[int, int], Tuple[int, int]]]:
     lines = input.splitlines()
-    res = [(v[0].split(","), v[1].split(",")) for v in [l.split(" -> ") for l in lines]]
-    for idx, l in enumerate(res):
-        res[idx] = ((int(l[0][0]), int(l[0][1])), (int(l[1][0]), int(l[1][1])))
+    lines_parsed = [
+        (v[0].split(","), v[1].split(",")) for v in [l.split(" -> ") for l in lines]
+    ]
+    res = []
+    for _idx, l in enumerate(lines_parsed):
+        res.append(((int(l[0][0]), int(l[0][1])), (int(l[1][0]), int(l[1][1]))))
     return res
 
 
-def part_one(lines: List[Tuple[Tuple[int]]]) -> int:
+def part_one(lines: List[Tuple[Tuple[int, int], Tuple[int, int]]]) -> int:
     res = 0
-    cover = defaultdict(int)
+    cover = defaultdict(int)  # type: Dict[Tuple[int, int], int]
     for line in lines:
         a, b = line[0], line[1]
         vertical = a[0] == b[0]
@@ -34,9 +37,9 @@ def part_one(lines: List[Tuple[Tuple[int]]]) -> int:
     return res
 
 
-def part_two(lines: List[Tuple[Tuple[int]]]) -> int:
+def part_two(lines: List[Tuple[Tuple[int, int], Tuple[int, int]]]) -> int:
     res = 0
-    cover = defaultdict(int)
+    cover = defaultdict(int)  # type: Dict[Tuple[int, int], int]
     for line in lines:
         a, b = line[0], line[1]
         vertical = a[0] == b[0]

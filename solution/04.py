@@ -6,24 +6,25 @@ from util import read_input
 TEST_INPUT, REAL_INPUT = read_input("04")
 
 
-def parse_input(input: str) -> Tuple[List[int], List[List[int]]]:
+def parse_input(input: str) -> Tuple[List[int], List[List[List[int]]]]:
     lines = input.splitlines()
     draw = [int(n) for n in lines[0].split(",")]
-    lines = [
+    lines_parsed = [
         [int(n.strip()) for n in l.split(" ") if len(n.strip()) > 0]
         for l in lines[2:]
         if len(l) > 0
     ]
     boards = []
-    for i in range(int(len(lines) / 5)):
+    for i in range(int(len(lines_parsed) / 5)):
         board = []
         for j in range(5):
-            board.append(lines[i * 5 + j])
+            board.append(lines_parsed[i * 5 + j])
         boards.append(board)
+    # print(boards)
     return draw, boards
 
 
-def part_one(draw: List[int], boards: List[List[int]]) -> int:
+def part_one(draw: List[int], boards: List[List[List[int]]]) -> int:
     res = 0
     winner = False
     for i in range(len(draw) - 5):
@@ -63,7 +64,7 @@ def sum_of_unmarked(marked: List[int], board: List[List[int]]) -> int:
     return res
 
 
-def part_two(draw: List[int], boards: List[List[int]]) -> int:
+def part_two(draw: List[int], boards: List[List[List[int]]]) -> int:
     res = 0
     winner = False
     already_won = []
