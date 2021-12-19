@@ -1,6 +1,5 @@
-import itertools
 from collections import defaultdict
-from typing import Dict, List, Set, Tuple
+from typing import Dict, List
 
 import pytest
 from util import read_input
