@@ -52,38 +52,41 @@ def decode_literal_value(packet_bin: str) -> Tuple[str, int]:
     return remaining_packets, literal_value
 
 
-def decode_operator(packet_bin: str, versions: List[int]) -> Tuple[str, List[int]]:
+def decode_operator(packet_bin: str) -> Tuple[str, List[int], int]:
     op_packet = packet_bin[6:]
     length_type_id = op_packet[0]
     vals = []
+    version_sum = 0
     if length_type_id == "0":
         total_length_bits = int(op_packet[1:16], 2)
         remaining_packets = op_packet[16:]
         prev_len = len(remaining_packets)
         while prev_len - len(remaining_packets) < total_length_bits:
-            remaining_packets, val = decode_packet(remaining_packets, versions)
+            remaining_packets, val, sub_version_sum = decode_packet(remaining_packets)
             vals += [val]
+            version_sum += sub_version_sum
     else:
         num_of_sub_packets = int(op_packet[1:12], 2)
         packets_consumed = 0
         remaining_packets = op_packet[12:]
         while packets_consumed < num_of_sub_packets:
-            remaining_packets, val = decode_packet(remaining_packets, versions)
+            remaining_packets, val, sub_version_sum = decode_packet(remaining_packets)
             vals += [val]
+            version_sum += sub_version_sum
             packets_consumed += 1
-    return remaining_packets, vals
+    return remaining_packets, vals, version_sum
 
 
-def decode_packet(packet_bin: str, versions: List[int]) -> Tuple[str, int]:
+def decode_packet(packet_bin: str) -> Tuple[str, int, int]:
     version = int(packet_bin[:3], 2)
-    versions += [version]
     type_id = int(packet_bin[3:6], 2)
+    version_sum = 0
     if type_id == 4:
         # literal value
         remaining_packets, val = decode_literal_value(packet_bin)
     else:
         # operator
-        remaining_packets, vals = decode_operator(packet_bin, versions)
+        remaining_packets, vals, version_sum = decode_operator(packet_bin)
         if type_id == 0:
             val = sum(vals)
         if type_id == 1:
@@ -101,15 +104,13 @@ def decode_packet(packet_bin: str, versions: List[int]) -> Tuple[str, int]:
         if type_id == 7:
             assert len(vals) == 2
             val = 1 if vals[0] == vals[1] else 0
-    return remaining_packets, val
+    return remaining_packets, val, version_sum + version
 
 
 def part_one(packet: str) -> int:
     res = 0
     packet_bin = hex_to_bin(packet)
-    versions = []  # type: List[int]
-    _remaining_packets, _val = decode_packet(packet_bin, versions)
-    version_sum = sum(versions)
+    _remaining_packets, _val, version_sum = decode_packet(packet_bin)
     res = version_sum
     return res
 
@@ -117,8 +118,7 @@ def part_one(packet: str) -> int:
 def part_two(packet: str) -> int:
     res = 0
     packet_bin = hex_to_bin(packet)
-    versions = []  # type: List[int]
-    _remaining_packets, val = decode_packet(packet_bin, versions)
+    _remaining_packets, val, _version_sum = decode_packet(packet_bin)
     res = val
     return res
 
@@ -137,9 +137,7 @@ def part_two(packet: str) -> int:
     ],
 )
 def test_part_one(input: str, res: int) -> None:
-    all_flag = True
-    if all_flag or input == "620080001611562C8802118E34":
-        assert part_one(parse_input(input)) == res
+    assert part_one(parse_input(input)) == res
 
 
 @pytest.mark.parametrize(
